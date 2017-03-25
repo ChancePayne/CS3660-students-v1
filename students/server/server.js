@@ -7,7 +7,7 @@ var fs = require('fs');
 //load express milddleware mdoules
 var logger = require('morgan');
 var compression = require('compression');
-var favicon = require('serve-favicon');
+// var favicon = require('serve-favicon');
 var path = require('path');
 var bodyParser = require('body-parser');
 
@@ -22,7 +22,7 @@ var app = express();
 
 app.use(logger('dev'));
 app.use(compression());
-app.use(favicon(WEB + '/img/favicon.ico'));
+// app.use(favicon(WEB + '/img/favicon.ico'));
 app.use(bodyParser.json());
 
 //REST end points
@@ -77,8 +77,9 @@ app.get('/api/v1/students/:id.json', function(req, res) {
       }
       
       res.set('id', req.params.id);
-
-      res.status(200).json(JSON.parse(data)); // send status 200 and fileList
+      data = JSON.parse(data);
+      data.id = req.params.id;
+      res.status(200).json(data); // send status 200 and fileList
    });
 
 });
@@ -102,6 +103,10 @@ app.put('/api/v1/students/:id.json', function(req, res) {
 // delete
 app.delete('/api/v1/students/:id.json', function(req, res) {
    var id = req.params.id;
+
+   if (id == null || id == "")
+       res.sendStatus(404);
+
    fs.unlink(`${__dirname}/students/${id}.json`, function(err) {
       if (err) throw err;
 
@@ -121,7 +126,8 @@ app.get('*', function(req, res) {
    res.status(404).sendFile(WEB + '/404.html');
 });
 
-var server = app.listen(process.env.PORT, process.env.IP);
+// var server = app.listen(process.env.PORT, process.env.IP);
+var server = app.listen(80, "127.0.0.1");
 
 console.log('Server is listening');
 

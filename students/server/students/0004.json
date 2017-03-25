@@ -1,11 +1,14 @@
 {
-   "fname": "Emmelie",
-   "lname": "Well",
-   "startDate": "12/23/92",
-   "street": "2710 West 3700 North",
-   "city": "Williamsburg",
-   "state": "ID",
-   "zip": 93667,
-   "phone": "369-3334",
-   "year": 4
+  "fname": "Emmelie",
+  "lname": "Well",
+  "startDate": "12/23/92",
+  "street": "2710 West 3700 North",
+  "city": "Williamsburg",
+  "state": "ID",
+  "zip": 93667,
+  "phone": "369-3334",
+  "year": 4,
+  "id": "0004",
+  "$$hashKey": "object:59",
+  "editing": false
 }

@@ -1,11 +1,13 @@
 {
-   "fname": "Jake",
-   "lname": "Paterson",
-   "startDate": "12/3/93",
-   "street": "103 South 1230 East",
-   "city": "Blythville",
-   "state": "ID",
-   "zip": 93699,
-   "phone": "739-3171",
-   "year": 3
+  "fname": "Jake",
+  "lname": "Paterson",
+  "startDate": "12/3/93",
+  "street": "103 South 1230 East",
+  "city": "Blythville",
+  "state": "ID",
+  "zip": 93699,
+  "phone": "739-3171",
+  "year": 3,
+  "id": "0009",
+  "editing": false
 }
