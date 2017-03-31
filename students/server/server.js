@@ -3,26 +3,58 @@ console.log('Loading Server');
 //load main modules
 var express = require('express');
 var fs = require('fs');
-
+// var nconf = require('nconf');
+var colors = require('colors');
 //load express milddleware mdoules
-var logger = require('morgan');
+var morgan = require('morgan');
+var winston = require('winston');
 var compression = require('compression');
 // var favicon = require('serve-favicon');
 var path = require('path');
 var bodyParser = require('body-parser');
-
 var WEB = path.resolve('../web'); // __dirname is the directory where the application is running from
+
 //var WEB = __dirname.replace('server', 'web');
 var SERVER = __dirname; // __dirname is the directory where the application is running from
+var logger = new winston.Logger({
+        transports: [
+            new winston.transports.File({
+                level: 'info',
+                filename: 'logs/logs.log',
+                handleExceptions: true,
+                json: true,
+                maxsize: 5242880,
+                maxFiles: 5,
+                colorize: true
+            }),
+            new winston.transports.Console({
+                level: 'debug',
+                handleExceptions: true,
+                json: false,
+                colorize: true
+            })
+        ],
+        exitOnError: false
+    });
+
+
+logger.stream = {
+    write: function(message, encoding){
+        logger.info(message);
+    }
+};
 
 //create express app
 var app = express();
 
 //insert middleware
 
-app.use(logger('dev'));
+// app.use(logger());
+
+app.use(require("morgan")("combined", { stream: logger.stream }));
 app.use(compression());
 // app.use(favicon(WEB + '/img/favicon.ico'));
+
 app.use(bodyParser.json());
 
 //REST end points
@@ -72,7 +104,9 @@ app.get('/api/v1/students/students.json', function(req, res) {
 app.get('/api/v1/students/:id.json', function(req, res) {
    var id = req.params.id;
    fs.readFile(`${__dirname}/students/${id}.json`, 'utf8', function(err, data) {
-      if (err) {
+
+       if (err) {
+        console.log(err.toString().red);
          res.sendStatus(404);
       }
       
@@ -93,7 +127,8 @@ app.put('/api/v1/students/:id.json', function(req, res) {
    console.log('data = ' + JSON.stringify(req.body));
 
    fs.writeFile(`${__dirname}/students/${id}.json`, data, 'utf8', function(err) {
-      if (err) throw err;
+      if (err)
+          console.log(err.toString().red);
 
       res.sendStatus(204); // send status 200 and fileList
    });
@@ -108,9 +143,10 @@ app.delete('/api/v1/students/:id.json', function(req, res) {
        res.sendStatus(404);
 
    fs.unlink(`${__dirname}/students/${id}.json`, function(err) {
-      if (err) throw err;
+       if (err)
+           console.log(err.toString().red);
 
-      res.sendStatus(204); // send status 200 and fileList
+       res.sendStatus(204); // send status 200 and fileList
    });
 
 });

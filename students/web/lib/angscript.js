@@ -96,9 +96,10 @@ angular.module('app', [])
 })
 .controller('StudentsListController', ['$scope', 'studentService', function($scope, studentService) {
     $scope.sortDir = false;
-    $scope.sortVal = "fname";
+    $scope.sortVal = "city";
     $scope.MAX = 15;
     $scope.students = [];
+    $scope.comp;
     $scope.person = {
         fname: "",
         lname: "",
@@ -119,11 +120,29 @@ angular.module('app', [])
             $scope.sortVal = column;
             $scope.sortDir = false;
         }
+
+        switch($scope.sortVal) {
+            case 'fname':
+            case 'lname':
+            case 'phone':
+            case 'street':
+            case 'city':
+            case 'state':
+                $scope.comp = "compareStrings";
+                break;
+            case 'zip':
+                $scope.comp = "compareNumbers";
+                break;
+            case 'year':
+            case 'startDate':
+                $scope.comp = "compareDate";
+                break;
+        }
     };
 
     $scope.sorted = function(column, direction) {
-        let val = ($scope.sortVal === column) && ($scope.sortDir == direction);
-        return val;
+
+        return ($scope.sortVal === column) && ($scope.sortDir == direction);
     }
 
     studentService.getStudents().then(function(res) {
