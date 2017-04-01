@@ -1,0 +1,5 @@
+{
+  "log-file": "logs/logs.log",
+  "base-api-url": "/api/v1/students",
+  "web-path": "../web"
+}
